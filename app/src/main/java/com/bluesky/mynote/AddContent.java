@@ -30,7 +30,7 @@ import java.util.Date;
 public class AddContent extends Activity implements View.OnClickListener {
     private NoteDB noteDB;
     private SQLiteDatabase dbWriter;
-    private String flag;
+    private String flag; //接受从mainactivity传来的标识 用于判定加载不同的添加内容界面(图文或者纯文字)
     private EditText editText;
     private Button save_btn,cancel_btn;
     private ImageView c_img;
@@ -44,7 +44,7 @@ public class AddContent extends Activity implements View.OnClickListener {
         save_btn.setOnClickListener(this);
         cancel_btn.setOnClickListener(this);
         noteDB=new NoteDB(this);
-        dbWriter=noteDB.getWritableDatabase();
+        dbWriter=noteDB.getWritableDatabase();//获取写入数据库权限
     }
 
     public void initView(){
@@ -53,21 +53,23 @@ public class AddContent extends Activity implements View.OnClickListener {
         cancel_btn= (Button) findViewById(R.id.cancel);
         c_img= (ImageView) findViewById(R.id.c_img);
         if(flag.equals("1")){
-            c_img.setVisibility(View.GONE);
+            c_img.setVisibility(View.GONE);//隐藏imageview
         }
         if(flag.equals("2")){
-            c_img.setVisibility(View.VISIBLE);
+            c_img.setVisibility(View.VISIBLE);//显示imageview
             //启动系统相机拍照
             Intent getImg=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            //图片是放在存储卡中 路径存在数据库中 以时间命名图片 避免重名
             imgfile=new File(Environment.getExternalStorageDirectory()
                     .getAbsolutePath()+"/"+getTime()+".jpg");
             getImg.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imgfile));
-            startActivityForResult(getImg,1);
+            startActivityForResult(getImg,1);//便于立即查看效果
 
 
         }
     }
 
+    //获取内容并写入数据库
     public void addDB(){
         ContentValues cv=new ContentValues();
         cv.put(NoteDB.CONTENT,editText.getText().toString());
@@ -76,6 +78,7 @@ public class AddContent extends Activity implements View.OnClickListener {
         dbWriter.insert(NoteDB.TABLE_NAME,null,cv);
     }
 
+    //获取系统当前时间
     public String getTime(){
         SimpleDateFormat format=new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
         Date curDate=new Date();

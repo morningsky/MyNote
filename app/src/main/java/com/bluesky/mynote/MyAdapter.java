@@ -42,11 +42,13 @@ public class MyAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater=LayoutInflater.from(mContext);
-        layout= (LinearLayout) inflater.inflate(R.layout.cell,null);
+        LayoutInflater inflater=LayoutInflater.from(mContext);//加载视图权限
+        layout= (LinearLayout) inflater.inflate(R.layout.cell,null);//加载视图
+        //初始化控件
         TextView content_tv= (TextView) layout.findViewById(R.id.list_content);
         TextView time_tv= (TextView) layout.findViewById(R.id.list_time);
         ImageView img_iv= (ImageView) layout.findViewById(R.id.list_img);
+        //查询mCursor 用String获取查询内容
         mCursor.moveToPosition(position);
         String content=mCursor.getString(mCursor.getColumnIndex("content"));
         String time=mCursor.getString(mCursor.getColumnIndex("time"));
@@ -67,6 +69,7 @@ public class MyAdapter extends BaseAdapter {
         int beWidth=options.outWidth/width;
         int beHeight=options.outHeight/height;
         int be=1;
+        //防止图片超出过大或过小不予缩小
         if(beWidth<beHeight){
             be=beWidth;
         }else {
